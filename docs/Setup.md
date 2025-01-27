@@ -61,3 +61,53 @@
    git push origin main
    ```
 - Überprüfe die Ergebnisse in der GitHub-Actions-Oberfläche.
+
+## Entwicklungsumgebung einrichten
+
+### 1. Projektverzeichnis erstellen
+Erstelle ein neues Verzeichnis für dein Projekt:
+```bash
+mkdir mein_projekt
+cd mein_projekt
+```
+
+### 2. Virtuelle Umgebung einrichten
+Richte eine Python-virtuelle Umgebung ein, um Abhängigkeiten isoliert zu installieren:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Abhängigkeiten installieren
+Installiere notwendige Python-Pakete:
+```bash
+pip install requests
+```
+
+### 4. Skript testen
+Erstelle ein kleines Python-Testskript, um sicherzustellen, dass alles funktioniert:
+```bash
+echo "import requests; print(requests.get('https://api.github.com').status_code)" > test.py
+python test.py
+```
+
+Wenn alles korrekt eingerichtet ist, solltest du als Ausgabe den HTTP-Statuscode `200` sehen.
+
+### 5. VS Code einrichten
+1. **Projekt in VS Code öffnen**:
+   ```bash
+   code .
+   ```
+2. **Virtuelle Umgebung auswählen**:
+   - Öffne die Command Palette (`Strg + Umschalt + P`).
+   - Wähle `Python: Select Interpreter`.
+   - Wähle den Interpreter aus, der auf `venv` verweist.
+
+### 6. Pip aktualisieren (optional)
+Halte Pip aktuell:
+```bash
+python -m pip install --upgrade pip
+```
+
+Jetzt ist deine Entwicklungsumgebung vollständig eingerichtet und bereit, Python-Code auszuführen!
+
