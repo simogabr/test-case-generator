@@ -1,0 +1,8 @@
+{
+    "ECU": "TCU",
+    "Mechanism": "Security Access",
+    "Details": {
+        "Seed": "ABC123",
+        "Key": "DEF456"
+    }
+}
