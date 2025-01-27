@@ -11,52 +11,16 @@ mechanism = data["Mechanism"]
 seed = data["Details"]["Seed"]
 key = data["Details"]["Key"]
 
-# Testfall-Vorlage mit den dynamischen Werten
-template = f"""
-Test Case Security Access $27
-Test Item: Security Access
-• Goal: To successfully test the UDS Service Secure Access $27 mechanism in the ECU ({ecu}).
+# Vorlage aus externer Datei laden
+with open("template.txt", "r") as file:
+    template = file.read()
 
-Init Steps
-Init Step 1: Prepare Tools, Documentation, and ECU for Security Access Testing
-• Action: Gather the Holon Diagnostic Tool (or CANoe with DLL), the communication matrix, ECU documentation, UDS documentation, and the ECU's corresponding cryptographic key. Ensure the ECU is connected, communication is stable, and switch to a session which Security Access is enabled (e.g., Programming Session via UDS Service $10).
-• Expected Result: All tools and documents are ready, the ECU is connected, communication is stable, and the diagnostic session is configured to permit Security Access.
-
-Run Steps
-Run Step 1: Verify Access Denied for Secured Functions Before Security Access
-• Action: Attempt to execute a secured function (e.g., RequestDownload using UDS Service $34) to confirm it is inaccessible before completing the Security Access process.
-• Expected Result: The secured function cannot be executed. The ECU responds with a negative response code (e.g., NRC 0x33 = securityAccessDenied).
-
-Run Step 2: Request Seed (Challenge) from the ECU
-• Action: Send a Seed request using UDS Service $27 with subfunction 0x01 to request a challenge.
-• Expected Result: ECU responds with a positive response (SID 0x67, subfunction 0x01) and sends the Seed (Seed = Random Number = Challenge) back to the tool.
-
-Run Step 3: Calculate the response Using the Seed
-• Action: Use the Seed/challenge provided by the ECU and the cryptographic algorithm in the tool and the cryptographic key to calculate the response.
-• Expected Result: A valid response is calculated based on the ECU’s challenge.
-
-Run Step 4: Send the response to the ECU
-• Action: Submit the calculated response to the ECU using UDS Service $27 with subfunction 0x02.
-• Expected Result: ECU responds with a positive response (SID 0x67, subfunction 0x02), granting access to secured functions.
-
-Run Step 5: Verify Access Granted for Secured Functions
-• Action: Attempt to execute the same secured function (e.g., RequestDownload using UDS Service $34) after completing Security Access.
-• Expected Result: The secured function is successfully executed, confirming that Security Access has been granted.
-
-Shutdown Step 1: Logout from the Programming Session
-• Action: Send a DiagnosticSessionControl (0x10) request with SubFunction Default Session (0x01) to switch the ECU from the current Programming Session to the Default Session.
-• Expected Result: The ECU is logged out of the Programming Session.
-
-The generated prompt for LLM should use this data:
-- ECU: {ecu}
-- Mechanism: {mechanism}
-- Seed: {seed}
-- Key: {key}.
-"""
+# Testfall-Vorlage mit dynamischen Werten befüllen
+filled_template = template.format(ecu=ecu, mechanism=mechanism, seed=seed, key=key)
 
 # Prompt für LLM erstellen
 print("Generierter Testfall-Prompt:")
-print(template)
+print(filled_template)
 
 # LLM-API-Request
 try:
@@ -65,7 +29,7 @@ try:
         headers={"Content-Type": "application/json"},
         json={
             "model": "llama2:7b",
-            "prompt": template
+            "prompt": filled_template
         }
     )
     # Antwort verarbeiten
