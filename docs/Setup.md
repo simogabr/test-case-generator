@@ -1,0 +1,6 @@
+# Setup-Anleitung
+
+## Voraussetzungen
+1. Docker installieren...
+2. Python-Abhängigkeiten...
+
